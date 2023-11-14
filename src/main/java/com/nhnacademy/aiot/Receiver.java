@@ -2,6 +2,7 @@ package com.nhnacademy.aiot;
 
 import io.lettuce.core.RedisClient;
 import io.lettuce.core.api.StatefulRedisConnection;
+import io.lettuce.core.api.sync.RedisCommands;
 import io.lettuce.core.api.sync.RedisHashCommands;
 import java.io.IOException;
 import java.net.DatagramPacket;
@@ -37,7 +38,7 @@ public class Receiver extends Thread {
                     resp = new AdcData(data);
                     AdcData adc = (AdcData)resp;
                     for (int i = 0; i < adc.getPayLoadSamples(); i++) {
-                        redisPut(adc.getTime(), adc.getConverted(i));
+                        redisPut(i, adc.getTime(), adc.getConverted(i));
                     }
                 } else {
                     continue;
@@ -50,11 +51,11 @@ public class Receiver extends Thread {
         }
     }
 
-    private void redisPut(String time, String str) {
+    private void redisPut(int channel, String time, String str) {
         Map<String, String> map = new HashMap<>();
         map.put(time, str);
 
-        RedisHashCommands<String, String> redisHashCommands = connection.sync();
-        redisHashCommands.hset("dataq", map);
+        RedisCommands<String, String> redisHashCommands = connection.sync();
+        redisHashCommands.hset(Integer.toString(channel), map);
     }
 }

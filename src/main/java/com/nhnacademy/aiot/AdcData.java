@@ -21,7 +21,7 @@ public class AdcData implements DQResponse {
         if (Objects.isNull(scanTime)) {
             scanTime = new AtomicLong(System.currentTimeMillis());
         }
-        time = scanTime.getAndAdd(100);
+        time = scanTime.getAndAdd(1);
 
         groupId = DQResponse.getSplitedByteBuffer(data, 4, 8).getInt();
         order = DQResponse.getSplitedByteBuffer(data, 8, 12).getInt();

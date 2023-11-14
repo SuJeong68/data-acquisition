@@ -17,6 +17,7 @@ public class DataQ extends Thread {
 
     private DatagramSocket socket;
     private InetAddress host;
+    private long interval = 500;
     private final int groupId = 1;
 
     public DataQ(byte[] hostAddress) {
@@ -41,6 +42,8 @@ public class DataQ extends Thread {
             setting();
 
             scanStart();
+
+            interval = 6000;
             while (!socket.isClosed()) {
                 keepAlive();
             }
@@ -71,8 +74,10 @@ public class DataQ extends Thread {
         send(new DQCommand(groupId, Command.COMMAND, "encode 0"));
         send(new DQCommand(groupId, Command.COMMAND, "ps 0"));
         configScnList();
-        send(new DQCommand(groupId, Command.COMMAND, "dec 512"));
-        send(new DQCommand(groupId, Command.COMMAND, "srate 11718"));
+//        send(new DQCommand(groupId, Command.COMMAND, "dec 512"));
+        send(new DQCommand(groupId, Command.COMMAND, "dec 60"));
+//        send(new DQCommand(groupId, Command.COMMAND, "srate 11718"));
+        send(new DQCommand(groupId, Command.COMMAND, "srate 1000"));
     }
 
     private void stopAndReset() {
@@ -96,7 +101,7 @@ public class DataQ extends Thread {
             DatagramPacket request = new DatagramPacket(message, message.length, host, DEVICE_PORT);
             socket.send(request);
 
-            Thread.sleep(500);
+            Thread.sleep(interval);
         } catch (IOException | InterruptedException e) {
             Thread.currentThread().interrupt();
         }
