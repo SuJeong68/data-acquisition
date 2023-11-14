@@ -1,11 +1,17 @@
 package com.nhnacademy.aiot;
 
+import io.lettuce.core.RedisClient;
+import io.lettuce.core.api.StatefulRedisConnection;
+import io.lettuce.core.api.sync.RedisHashCommands;
 import java.io.IOException;
 import java.net.DatagramPacket;
 import java.net.DatagramSocket;
+import java.util.HashMap;
+import java.util.Map;
 
 public class Receiver extends Thread {
     private final DatagramSocket socket;
+    private StatefulRedisConnection<String, String> connection;
 
     public Receiver(DatagramSocket socket) {
         this.socket = socket;
@@ -13,7 +19,9 @@ public class Receiver extends Thread {
 
     @Override
     public void run() {
-        try {
+        try (RedisClient redisClient = RedisClient.create("redis://password@localhost:6379/0")) {
+            connection = redisClient.connect();
+
             byte[] data = new byte[1024];
             DatagramPacket response = new DatagramPacket(data, data.length);
 
@@ -27,6 +35,10 @@ public class Receiver extends Thread {
                     resp = new Response(data);
                 } else if (AdcData.TYPE == type) {
                     resp = new AdcData(data);
+                    AdcData adc = (AdcData)resp;
+                    for (int i = 0; i < adc.getPayLoadSamples(); i++) {
+                        redisPut(adc.getTime(), adc.getConverted(i));
+                    }
                 } else {
                     continue;
                 }
@@ -36,5 +48,13 @@ public class Receiver extends Thread {
         } catch (IOException e) {
             Thread.currentThread().interrupt();
         }
+    }
+
+    private void redisPut(String time, String str) {
+        Map<String, String> map = new HashMap<>();
+        map.put(time, str);
+
+        RedisHashCommands<String, String> redisHashCommands = connection.sync();
+        redisHashCommands.hset("dataq", map);
     }
 }

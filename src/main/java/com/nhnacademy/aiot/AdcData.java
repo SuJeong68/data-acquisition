@@ -55,9 +55,17 @@ public class AdcData implements DQResponse {
         return sb.toString();
     }
 
+    public String getConverted(int i) {
+        return Double.toString(converted[i]);
+    }
+
     public String getTime() {
-        SimpleDateFormat timeFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+        SimpleDateFormat timeFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss.SSS");
         return timeFormat.format(new Date(time));
+    }
+
+    public int getPayLoadSamples() {
+        return payLoadSamples;
     }
 
     @Override
