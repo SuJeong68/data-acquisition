@@ -1,0 +1,19 @@
+[
+  {
+    "id": "1",
+    "model": "DATAQ_DI_4108_E",
+    "name": "DATAQ DI-4108-E 1",
+    "branch": "경남 캠퍼스",
+    "place": "사무실",
+    "groupId": 1,
+    "address": [192, 168, 70, 28],
+    "sensors": [
+      "temperature"
+    ],
+    "slist": [256],
+    "encode": 0,
+    "ps": 0,
+    "dec": 60,
+    "srate": 500
+  }
+]

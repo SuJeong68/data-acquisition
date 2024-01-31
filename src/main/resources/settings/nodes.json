@@ -1,0 +1,28 @@
+[
+  {
+    "id": "make1",
+    "type": "DEVICE_MAKE_AND_EXECUTE",
+    "name": "DeviceMakeAndExecuteNode 1",
+    "wires": [
+      "classify1"
+    ]
+  },
+  {
+    "id": "classify1",
+    "type": "RESPONSE_CLASSIFY",
+    "name": "ResponseClassifyNode 1",
+    "wires": [
+      "influx_insert1"
+    ]
+  },
+  {
+    "id": "debug1",
+    "type": "DEBUG",
+    "name": "DebugNode 1"
+  },
+  {
+    "id": "influx_insert1",
+    "type": "INFLUX_INSERT",
+    "name": "InfluxInsertNode 1"
+  }
+]
