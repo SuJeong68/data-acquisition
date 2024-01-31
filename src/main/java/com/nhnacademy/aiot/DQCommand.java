@@ -18,11 +18,6 @@ public class DQCommand {
         this.payLoad = payLoad;
     }
 
-    // 적용 보류 (리팩...)
-    /*public static DQCommand createCommand(int groupId, String payLoad) {
-        return new DQCommand(groupId, Command.COMMAND, payLoad);
-    }*/
-
     public byte[] toByteArray() {
         ByteBuffer byteBuffer = ByteBuffer.allocate(4 * 6 + payLoad.getBytes().length);
 
