@@ -12,7 +12,6 @@ import java.util.List;
 public class DataQ extends Thread {
     private static final int PC_PORT = 1234;
     private static final int DEVICE_PORT = 51235;
-//    private static final int TIMEOUT = 10000;
     private static final List<Integer> SLIST = List.of(0x0100, 0x0101, 0x0102, 0x0103, 0x0104, 0x0105, 0x0106, 0x0107);
 
     private DatagramSocket socket;
@@ -23,7 +22,6 @@ public class DataQ extends Thread {
     public DataQ(byte[] hostAddress) {
         try {
             socket = new DatagramSocket(PC_PORT);
-//            socket.setSoTimeout(TIMEOUT);
 
             host = InetAddress.getByAddress(hostAddress);
         } catch (SocketException | UnknownHostException e) {
@@ -74,9 +72,7 @@ public class DataQ extends Thread {
         send(new DQCommand(groupId, Command.COMMAND, "encode 0"));
         send(new DQCommand(groupId, Command.COMMAND, "ps 0"));
         configScnList();
-//        send(new DQCommand(groupId, Command.COMMAND, "dec 512"));
         send(new DQCommand(groupId, Command.COMMAND, "dec 60"));
-//        send(new DQCommand(groupId, Command.COMMAND, "srate 11718"));
         send(new DQCommand(groupId, Command.COMMAND, "srate 1000"));
     }
 
